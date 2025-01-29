@@ -3,7 +3,7 @@ const axios = require('axios');
 const qs = require('node:querystring');
 const { chain } = require('radash')
 const cron = require('node-cron')
-
+const chatId = -1002282812439
 const aprThresholds = [
   {
     duration: 7,
@@ -226,9 +226,12 @@ cron.schedule('*/30 * * * * *', () => {
     const x = formatOrdersByDuration(chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
 
     for (const text of x ) {
-      await announce(text,  -1002282812439)
+      await announce(text,  chatId)
     }
     console.log(`processed`)
   })();
 });
 
+cron.schedule('0 * * * *', async () => {
+  await announce('บอทยังทำงานอยู่ ไม่ได้หนีจากไปไหน',  chatId)
+})
