@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # สั่งให้รันแอปพลิเคชันเมื่อ container เริ่มทำงาน
-CMD ["node", "app.js"]
+CMD ["node", "main.js"]
