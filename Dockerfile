@@ -1,5 +1,5 @@
 # ใช้ Node.js ภาพฐานล่าสุดกับ Alpine 22
-FROM node:latest-alpine
+FROM node:22-alpine
 
 # ตั้งค่าสถานที่ทำงานใน Docker image
 WORKDIR /app
