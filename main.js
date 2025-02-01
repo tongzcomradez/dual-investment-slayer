@@ -5,19 +5,64 @@ const cron = require('node-cron')
 const chatId = -1002282812439
 const aprThresholds = [
   {
+    pairAsset: 'USDT/XRP',
     duration: 1,
-    // apr: 50,
     apr: 600,
   },
   {
+    pairAsset: 'USDT/XRP',
     duration: 3,
-    // apr: 50,
     apr: 430,
   },
   {
+    pairAsset: 'USDT/XRP',
     duration: 7,
-    // apr: 50,
     apr: 240,
+  },
+  {
+    pairAsset: 'USDT/BTC',
+    duration: 1,
+    apr: 250,
+  },
+  {
+    pairAsset: 'USDT/BTC',
+    duration: 3,
+    apr: 150,
+  },
+  {
+    pairAsset: 'USDT/BTC',
+    duration: 7,
+    apr: 100,
+  },
+  {
+    pairAsset: 'USDT/SOL',
+    duration: 1,
+    apr: 500,
+  },
+  {
+    pairAsset: 'USDT/SOL',
+    duration: 3,
+    apr: 300,
+  },
+  {
+    pairAsset: 'USDT/SOL',
+    duration: 7,
+    apr: 150,
+  },
+  {
+    pairAsset: 'USDT/ETH',
+    duration: 1,
+    apr: 400,
+  },
+  {
+    pairAsset: 'USDT/ETH',
+    duration: 3,
+    apr: 250,
+  },
+  {
+    pairAsset: 'USDT/ETH',
+    duration: 7,
+    apr: 150,
   },
 ]
 
@@ -91,8 +136,10 @@ const getDualInvestments = async (asset) => {
     .filter((i) => i.canPurchase)
     .map((invest) => {
       const type = invest.type === 'UP'? 'Sell High' : 'Buy Low'
+      const pairAsset = invest.type === 'UP' ? `${invest.targetAsset}/${invest.investmentAsset}`: `${invest.investmentAsset}/${invest.targetAsset}`
       return {
         type,
+        pairAsset,
         asset: `${invest.investmentAsset}/${invest.targetAsset}`,
         targetPrice: (+invest.strikePrice).toFixed(2),
         apr: (invest.apr  * 100).toFixed(2),
@@ -101,8 +148,8 @@ const getDualInvestments = async (asset) => {
       }
     })
     .filter((i) => {
-      const aprThreshold = aprThresholds.find((t) => i.duration >= t.duration)
-      return i.apr >= aprThreshold.apr
+      const aprThreshold = aprThresholds.find((t) => i.duration >= t.duration && i.pairAsset === t.pairAsset)
+      return i.apr >= aprThreshold?.apr
     })
 };
 
@@ -226,7 +273,7 @@ cron.schedule('*/30 * * * * *', () => {
       const x = formatOrdersByDuration(_.chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
 
       for (const text of x ) {
-        await announce(text,  chatId)
+        // await announce(text,  chatId)
       }
       console.log(`processed`)
     } catch (error) {
