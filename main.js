@@ -1,25 +1,24 @@
 const _ = require('radash')
 const axios = require('axios');
 const qs = require('node:querystring');
-const { chain } = require('radash')
 const cron = require('node-cron')
 const chatId = -1002282812439
 const aprThresholds = [
   {
-    duration: 7,
-    apr: 50,
-    apr: 270,
+    duration: 1,
+    // apr: 50,
+    apr: 600,
   },
   {
     duration: 3,
-    apr: 50,
-    apr: 450,
+    // apr: 50,
+    apr: 430,
   },
   {
-    duration: 1,
-    apr: 50,
-    apr: 650,
-  }
+    duration: 7,
+    // apr: 50,
+    apr: 240,
+  },
 ]
 
 const baseURL = 'https://www.binance.com/bapi/earn/v5/friendly/pos/dc/project/list'
@@ -212,26 +211,31 @@ const formatOrdersByDuration = (groupedOrders) => {
 
 cron.schedule('*/30 * * * * *', () => {
   (async () => {
-    console.log(`processing`)
-    const suggestionInvestment = (await _.parallel(3, assets, async (asset) => {
-      const data = await getDualInvestments(asset)
-      if (!data.length) {
-        return
+    try {
+      console.log(`processing`)
+      const suggestionInvestment = (await _.parallel(3, assets, async (asset) => {
+        const data = await getDualInvestments(asset)
+        if (!data.length) {
+          return
+        }
+
+        return  getMaxAPRByDuration(data)
+      }))
+        .filter(i => !!i)
+
+      const x = formatOrdersByDuration(_.chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
+
+      for (const text of x ) {
+        await announce(text,  chatId)
       }
-
-      return  getMaxAPRByDuration(data)
-    }))
-      .filter(i => !!i)
-
-    const x = formatOrdersByDuration(chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
-
-    for (const text of x ) {
-      await announce(text,  chatId)
+      console.log(`processed`)
+    } catch (error) {
+      console.log('processing error', error)
+      await announce('มี Error เข้ามาดูหน่อย', chatId)
     }
-    console.log(`processed`)
   })();
 });
 
 cron.schedule('0 * * * *', async () => {
-  await announce('บอทยังทำงานอยู่ ไม่ได้หนีจากไปไหน',  chatId)
+  // await announce('บอทยังทำงานอยู่ ไม่ได้หนีจากไปไหน',  chatId)
 })
