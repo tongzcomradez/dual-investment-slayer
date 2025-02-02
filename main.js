@@ -6,28 +6,19 @@ const chatId = -1002282812439
 const aprThresholds = [
   {
     pairAsset: 'USDT/XRP',
-    duration: 1,
-    apr: 600,
+    duration: 7,
+    apr: 240,
   },
   {
     pairAsset: 'USDT/XRP',
     duration: 3,
     apr: 430,
   },
+
   {
     pairAsset: 'USDT/XRP',
-    duration: 7,
-    apr: 240,
-  },
-  {
-    pairAsset: 'USDT/BTC',
     duration: 1,
-    apr: 250,
-  },
-  {
-    pairAsset: 'USDT/BTC',
-    duration: 3,
-    apr: 150,
+    apr: 600,
   },
   {
     pairAsset: 'USDT/BTC',
@@ -35,14 +26,14 @@ const aprThresholds = [
     apr: 100,
   },
   {
-    pairAsset: 'USDT/SOL',
-    duration: 1,
-    apr: 500,
+    pairAsset: 'USDT/BTC',
+    duration: 3,
+    apr: 150,
   },
   {
-    pairAsset: 'USDT/SOL',
-    duration: 3,
-    apr: 300,
+    pairAsset: 'USDT/BTC',
+    duration: 1,
+    apr: 250,
   },
   {
     pairAsset: 'USDT/SOL',
@@ -50,9 +41,20 @@ const aprThresholds = [
     apr: 150,
   },
   {
-    pairAsset: 'USDT/ETH',
+    pairAsset: 'USDT/SOL',
+    duration: 3,
+    apr: 300,
+  },
+
+  {
+    pairAsset: 'USDT/SOL',
     duration: 1,
-    apr: 400,
+    apr: 500,
+  },
+  {
+    pairAsset: 'USDT/ETH',
+    duration: 7,
+    apr: 150,
   },
   {
     pairAsset: 'USDT/ETH',
@@ -61,8 +63,8 @@ const aprThresholds = [
   },
   {
     pairAsset: 'USDT/ETH',
-    duration: 7,
-    apr: 150,
+    duration: 1,
+    apr: 400,
   },
 ]
 
@@ -256,7 +258,7 @@ const formatOrdersByDuration = (groupedOrders) => {
   return result;
 };
 
-cron.schedule('*/30 * * * * *', () => {
+cron.schedule('*/10 * * * * *', () => {
   (async () => {
     try {
       console.log(`processing`)
@@ -273,7 +275,7 @@ cron.schedule('*/30 * * * * *', () => {
       const x = formatOrdersByDuration(_.chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
 
       for (const text of x ) {
-        // await announce(text,  chatId)
+        await announce(text,  chatId)
       }
       console.log(`processed`)
     } catch (error) {
