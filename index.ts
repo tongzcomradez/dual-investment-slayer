@@ -69,7 +69,7 @@ const aprThresholds = [
 ]
 
 const baseURL = 'https://www.binance.com/bapi/earn/v5/friendly/pos/dc/project/list'
-const botToken = 'bot7736698354:AAHbf49XHD1EC9L7wS_R-AQ16gwCJeMjPzIxx'
+const botToken = 'bot7736698354:AAHbf49XHD1EC9L7wS_R-AQ16gwCJeMjPzI'
 
 export const sellHighAssets = [
   {
