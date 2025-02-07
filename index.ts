@@ -269,7 +269,7 @@ const formatOrdersByDuration = (groupedOrders) => {
   return result;
 };
 
-cron.schedule('*/10 * * * * *', () => {
+cron.schedule('*/20 * * * * *', () => {
   (async () => {
     try {
       console.log(`processing`)
