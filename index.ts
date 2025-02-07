@@ -7,7 +7,7 @@ const aprThresholds = [
   {
     pairAsset: 'USDT/XRP',
     duration: 7,
-    apr: 240,
+    apr: 200,
   },
   {
     pairAsset: 'USDT/XRP',
