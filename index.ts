@@ -69,9 +69,9 @@ const aprThresholds = [
 ]
 
 const baseURL = 'https://www.binance.com/bapi/earn/v5/friendly/pos/dc/project/list'
-const botToken = 'bot7736698354:AAHbf49XHD1EC9L7wS_R-AQ16gwCJeMjPzI'
+const botToken = 'bot7736698354:AAHbf49XHD1EC9L7wS_R-AQ16gwCJeMjPzIxx'
 
-const sellHighAssets = [
+export const sellHighAssets = [
   {
     investmentAsset : 'BTC',
     targetAsset : 'USDT',
@@ -94,7 +94,7 @@ const sellHighAssets = [
   }
 ]
 
-const buyLowAssets = [
+export const buyLowAssets = [
   {
     investmentAsset : 'USDT',
     targetAsset : 'BTC',
@@ -117,12 +117,35 @@ const buyLowAssets = [
   }
 ]
 
-const assets = [
+export const assets = [
   ...sellHighAssets,
   ...buyLowAssets,
 ]
 
-const getDualInvestments = async (asset) => {
+export const filterOnlySuggestion = (dualInvestments) => {
+  return _.chain(
+    (is) => is.filter(i => i.canPurchase),
+    (is) => is.map(i => {
+      const type = i.type === 'UP'? 'Sell High' : 'Buy Low'
+      const pairAsset = i.type === 'UP' ? `${i.targetAsset}/${i.investmentAsset}`: `${i.investmentAsset}/${i.targetAsset}`
+      return {
+        type,
+        pairAsset,
+        asset: `${i.investmentAsset}/${i.targetAsset}`,
+        targetPrice: (+i.strikePrice).toFixed(2),
+        apr: parseFloat((+i.apr  * 100).toFixed(2)),
+        duration: +i.duration,
+        settlementDate: new Date(+i.settleTime)
+      }
+    }),
+    (is) => is.filter(i => {
+      const aprThreshold = aprThresholds.find((t) => i.duration >= t.duration && i.pairAsset === t.pairAsset)
+      return i.apr >= aprThreshold?.apr
+    })
+  )(dualInvestments)
+}
+
+export const getDualInvestments = async (asset) => {
   const query = qs.stringify({
     investmentAsset:asset.investmentAsset,
     targetAsset: asset.targetAsset,
@@ -134,21 +157,9 @@ const getDualInvestments = async (asset) => {
   const url = `${baseURL}?${query}`
 
   const response = await axios.get(url);
+  return filterOnlySuggestion(response?.data?.data?.list || [])
+
   return (response?.data?.data?.list || [])
-    .filter((i) => i.canPurchase)
-    .map((invest) => {
-      const type = invest.type === 'UP'? 'Sell High' : 'Buy Low'
-      const pairAsset = invest.type === 'UP' ? `${invest.targetAsset}/${invest.investmentAsset}`: `${invest.investmentAsset}/${invest.targetAsset}`
-      return {
-        type,
-        pairAsset,
-        asset: `${invest.investmentAsset}/${invest.targetAsset}`,
-        targetPrice: (+invest.strikePrice).toFixed(2),
-        apr: (invest.apr  * 100).toFixed(2),
-        duration: +invest.duration,
-        settlementDate: new Date(+invest.settleTime)
-      }
-    })
     .filter((i) => {
       const aprThreshold = aprThresholds.find((t) => i.duration >= t.duration && i.pairAsset === t.pairAsset)
       return i.apr >= aprThreshold?.apr
