@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b15ab5b6-8096-4552-a267-b495756a8376" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__tests__/main.spec.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,6 +21,7 @@
       <list>
         <option value="Dockerfile" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -60,7 +65,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ToggleCodyToolWindowAfterMigration&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;x&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/jonathan/Workspace/playground/bn-dual-investment-signal&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -121,6 +126,7 @@
       <workItem from="1738493115866" duration="609000" />
       <workItem from="1738938422388" duration="1981000" />
       <workItem from="1738940416326" duration="819000" />
+      <workItem from="1739124716011" duration="2608000" />
     </task>
     <servers />
   </component>
