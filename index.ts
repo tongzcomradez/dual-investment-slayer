@@ -28,7 +28,7 @@ const suggestionInvestment = async (command: { chatId: number, threadId?: number
 
   const x = formatOrdersByDuration(_.chain(groupByDuration, groupAndSortByType)(suggestionInvestment))
 
-  await updateMaxApr(suggestionInvestment)
+  // await updateMaxApr(suggestionInvestment)
   for (const text of x ) {
     await announce(text,  chatId, threadId)
   }
