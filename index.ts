@@ -73,7 +73,7 @@ const main = async () => {
   })
 };
 
-cron.schedule('*/20 * * * * *', async () => {
+cron.schedule('*/7 * * * * *', async () => {
   try {
     await main()
   } catch (error) {
